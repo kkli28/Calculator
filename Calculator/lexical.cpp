@@ -116,8 +116,8 @@ void lexical::driver(string& _expr, string _lexs[], string _vals[], int& _count)
 
 		//Æ¥Åäº¯Êý
 		if (matchFunction(iter1, iter2, endIter)) {
-			_lexs[_count] = string(iter1, iter2);
-			_vals[_count] = _lexs[_count];
+			_lexs[_count] = "FUNC";
+			_vals[_count] = string(iter1,iter2);
 			cout << "match FUNC: " << _vals[_count] << endl;
 			iter1 = iter2;
 			preType = _vals[_count];
@@ -128,14 +128,14 @@ void lexical::driver(string& _expr, string _lexs[], string _vals[], int& _count)
 		//Æ¥Åä³£Á¿
 		if (matchConstant(iter1, iter2, endIter)) {
 			if (iter1+1 == iter2) {
-				_lexs[_count] = "e";
+				_lexs[_count] = "E";
 				_vals[_count] = "2.718281828459";
 			}
 			else if (iter1+2 == iter2) {
-				_lexs[_count] = "pi";
+				_lexs[_count] = "PI";
 				_vals[_count] = "3.141592653589";
 			}
-			else throw Error(string("´íÎóµÄ·ûºÅ: ") + string(iter1, iter2));
+			else throw Error(string("Error! lexical::driver()"));
 
 			iter1 = iter2;
 			preType = _lexs[_count];
@@ -165,7 +165,7 @@ void lexical::driver(string& _expr, string _lexs[], string _vals[], int& _count)
 				_lexs[_count] = "POW";
 				_vals[_count] = "^";
 			}
-			else throw Error(string("´íÎóµÄ·ûºÅ: ")+*iter1);
+			else throw Error(string("Error! lexical::driver()"));
 
 			//cout << "match OP: " << _vals[_count] << endl;
 
@@ -185,7 +185,7 @@ void lexical::driver(string& _expr, string _lexs[], string _vals[], int& _count)
 				_lexs[_count] = "RB";
 				_vals[_count] = ")";
 			}
-			else throw Error(string("´íÎóµÄ·ûºÅ: ") + *iter1);
+			else throw Error(string("Error! lexical::driver()"));
 
 			//cout << "match BR: " << _vals[_count] << endl;
 
@@ -215,6 +215,6 @@ void lexical::driver(string& _expr, string _lexs[], string _vals[], int& _count)
 			continue;
 		}
 
-		throw Error(string("´íÎóµÄ·ûºÅ: ") + *iter1);
+		throw Error(string("Error! lexical::driver()"));
 	}
 }

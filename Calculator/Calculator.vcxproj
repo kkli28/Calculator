@@ -145,6 +145,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Constant.h" />
     <ClInclude Include="error.h" />
     <ClInclude Include="lexical.h" />
     <ClInclude Include="stdafx.h" />

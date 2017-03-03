@@ -25,7 +25,7 @@ void printFuncs() {
 	cout << "log 	对数（e为底）" << endl;
 	cout << "log2 	对数（2为底）" << endl;
 	cout << "log10 	对数（10为底）" << endl;
-	cout << "fmod 	求余" << endl;
+	cout << " fmod	求余" << endl;
 }
 
 int main() {
@@ -49,13 +49,13 @@ int main() {
 			}
 			lexer.driver(expr, lexs, vals, count);
 			//for (int i = 0; i < count; ++i) cout << lexs[i] << " : " << vals[i] << endl;
-			cout << "result: " << syntaxer.driver(lexs, vals, count) << endl;
+			cout << "result: " <<setprecision(16)<< syntaxer.driver(lexs, vals, count) << endl;
 		}
 		catch (Error e) {
 			cout << e.what() << endl;
 		}
 		catch (exception e) {
-			cout << "未知错误!Calculator::main()." << endl;
+			cout << "Error! Calculator::main()." << endl;
 		}
 	} while (true);
 	system("pause");

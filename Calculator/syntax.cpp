@@ -6,6 +6,7 @@ using namespace std;
 void syntax::E(string _lexs[], string _vals[], int& _begIndex, int& _endIndex, string _format, stack<string>& _stk) {
 	//cout << _format << "E: " << endl;
 
+	//E --> null
 	if (_begIndex == _endIndex) {
 		//cout << _format << "    match: null" << endl;
 		return;
@@ -59,7 +60,7 @@ void syntax::B(string _lexs[], string _vals[], int& _begIndex, int& _endIndex, s
 			++_begIndex;
 			F(_lexs, _vals, _begIndex, _endIndex, _format + "    ", _stk);
 			_stk.push(_vals[index]);
-			A(_lexs, _vals, _begIndex, _endIndex, _format + "    ", _stk);
+			B(_lexs, _vals, _begIndex, _endIndex, _format + "    ", _stk);
 		}
 	}
 
@@ -101,16 +102,35 @@ void syntax::M(string _lexs[], string _vals[], int& _begIndex, int& _endIndex, s
 	//cout << _format << "M: " << endl;
 	if (_begIndex != _endIndex) {
 
+		string str = _lexs[_begIndex];
 		//M --> i
-		if (_lexs[_begIndex] == "NUM") {
+		if (str == "NUM" || str=="E" || str=="PI") {
 			//cout << _format << "    match: " << _vals[_begIndex] << endl;
 			_stk.push(_vals[_begIndex]);
 			++_begIndex;
 			return;
 		}
 
+		//M --> func(E)
+		else if (str == "FUNC") {
+			string func = _vals[_begIndex];
+			//cout << _format << "    match: " << _vals[_begIndex] << endl;
+			++_begIndex;
+			if (_begIndex != _endIndex && _lexs[_begIndex] == "LB") {
+				//cout << _format << "    match: " << _vals[_begIndex] << endl;
+				++_begIndex;
+				E(_lexs, _vals, _begIndex, _endIndex, _format + "    ", _stk);
+				_stk.push(func);
+				if (_begIndex != _endIndex && _lexs[_begIndex] == "RB") {
+					//cout << _format << "    match: " << _vals[_begIndex] << endl;
+					++_begIndex;
+					return;
+				}
+			}
+		}
+
 		//M --> (E)
-		else if (_lexs[_begIndex] == "LB") {
+		else if (str == "LB") {
 			//cout << _format << "    match: " << _vals[_begIndex] << endl;
 			++_begIndex;
 			E(_lexs, _vals, _begIndex, _endIndex, _format + "    ", _stk);
@@ -121,7 +141,7 @@ void syntax::M(string _lexs[], string _vals[], int& _begIndex, int& _endIndex, s
 			}
 		}
 	}
-	throw Error(string("错误的符号: ") + _vals[_begIndex]);
+	throw Error(string("syntax::M()."+_format)+_vals[_begIndex]);
 }
 
 //字符串转化为数字
@@ -146,7 +166,7 @@ double syntax::strToDouble(string& _str) {
 			result = result + temp;
 			break;
 		}
-		else throw Error(string("错误的符号!")+_str[i]);
+		else throw Error(string("NaN"));
 	}
 
 	result = positive ? result : -result;
@@ -160,12 +180,17 @@ double syntax::strToDouble(string& _str) {
 double syntax::driver(string _lexs[], string _vals[], int _count) {
 	int index = 0;
 	stack<string> stk;			//保存反后缀式
+
+	//TEST
+	//for (int i = 0; i < _count; ++i) cout << _lexs[i] << ": " << _vals[i] << endl;
 	E(_lexs, _vals, index, _count, "", stk);
+
 	if (stk.empty()) return 0;
 
 	stack<string> rvStack;		//保存正序的后缀式
 	while (!stk.empty()) {
 		rvStack.push(stk.top());
+		//cout << "rvStack.push(" << stk.top() << ")" << endl;
 		stk.pop();
 	}
 
@@ -177,8 +202,9 @@ double syntax::driver(string _lexs[], string _vals[], int _count) {
 	while (!rvStack.empty()) {
 		topStr = rvStack.top();
 		rvStack.pop();
+		//cout << topStr << "=====" << endl;
 		if (topStr == "+" || topStr == "-" || topStr == "*" || topStr == "/" || topStr == "^") {
-			if (stk.size() < 2) throw Error("未知错误!syntax::driver().");
+			if (stk.size() < 2) throw Error("Error! syntax::driver().");
 			numStr1 = stk.top();						//注意！！！第二个操作数（在栈顶）
 			stk.pop();
 			numStr2 = stk.top();						//第一个操作数
@@ -192,12 +218,20 @@ double syntax::driver(string _lexs[], string _vals[], int _count) {
 			else if (topStr == "*") result = num1*num2;
 			else if (topStr == "/") result = num1 / num2;
 			else if (topStr == "^") result = pow(num1, num2);	//没法自己实现浮点数的乘方，故调用标准库pow函数
-			else throw Error("未知错误!syntax::driver().");
+			else throw Error("Error! syntax::driver().");
 
 			stk.push(to_string(result));				//保存结果
 		}
+		else if (isFunction(topStr.begin(), topStr.end())) {
+			numStr1 = stk.top();
+			stk.pop();
+			double num1 = strToDouble(numStr1);
+			//cout << topStr << "(" << num1 << ")" << endl;
+			result=getFunction(topStr)(num1);
+			stk.push(to_string(result));
+		}
 		else stk.push(topStr);							//是数字，则保存与另一个栈中
 	}
-	if (stk.empty()) throw Error("未知错误!syntax::driver().");
+	if (stk.empty()) throw Error("Error! syntax::driver().");
 	return strToDouble(stk.top());
 }

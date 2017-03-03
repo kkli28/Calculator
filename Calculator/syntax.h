@@ -20,6 +20,7 @@ class syntax {
 		N --> ^MN
 		N --> null
 		M --> i			//i表示数字
+		M --> func(E)	//func表示函数
 		M --> (E)
 		*/
 private:

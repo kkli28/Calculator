@@ -13,6 +13,9 @@ class lexical {
 	POW: 乘方
 	LB:  左括号
 	RB:  右括号
+	E:   自然对数
+	PI:  圆周率
+	FUNC: 函数
 
 	cmath头文件中的部分内容
 	e:	 自然对数
@@ -28,18 +31,8 @@ class lexical {
 	log: 对数（e为底）
 	log2: 对数（2为底）
 	log10: 对数（10为底）
-	fmod: 求余
 	*/
 private:
-	
-	//函数个数
-	static const int FUNC_SIZE = 12;
-
-	//函数
-	const string functions[FUNC_SIZE] = {
-		"abs","ceil","exp","floor","cos","sin","sqrt","tan","log","log2","log10","fmod"
-	};
-
 	//是数字？
 	inline bool isNumber(char c) {
 		if (c >= 0x30 && c <= 0x39) return true;
@@ -57,13 +50,6 @@ private:
 		if (c == ' ' || c == '\t' || c == '\n') return true;
 		else return false;
 	}
-
-	//是函数
-	inline bool isFunction(string::iterator _begIter, string::iterator _endIter) {
-		for (int i = 0; i < FUNC_SIZE; ++i) if (string(_begIter, _endIter) == functions[i]) return true;
-		return false;
-	}
-
 	/*
 	匹配函数：
 	matchNumber: 匹配数字

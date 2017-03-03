@@ -17,4 +17,6 @@
 #include<string>
 #include<stack>
 #include<iostream>
+#include<iomanip>
 #include"error.h"
+#include"Constant.h"

@@ -146,7 +146,7 @@ double syntax::strToDouble(string& _str) {
 			result = result + temp;
 			break;
 		}
-		else throw Error(string("Î´ÖªµÄ·ûºÅ!")+_str[i]);
+		else throw Error(string("´íÎóµÄ·ûºÅ!")+_str[i]);
 	}
 
 	result = positive ? result : -result;

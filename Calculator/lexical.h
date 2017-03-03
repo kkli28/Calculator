@@ -13,9 +13,33 @@ class lexical {
 	POW: 乘方
 	LB:  左括号
 	RB:  右括号
-	*/
 
+	cmath头文件中的部分内容
+	e:	 自然对数
+	pi:  圆周率
+	abs: 绝对值
+	ceil: 向上取整
+	exp: e的n次方
+	floor: 向下取整
+	cos: 余弦
+	sin: 正弦
+	sqrt: 开平方
+	tan: 正切
+	log: 对数（e为底）
+	log2: 对数（2为底）
+	log10: 对数（10为底）
+	fmod: 求余
+	*/
 private:
+	
+	//函数个数
+	static const int FUNC_SIZE = 12;
+
+	//函数
+	const string functions[FUNC_SIZE] = {
+		"abs","ceil","exp","floor","cos","sin","sqrt","tan","log","log2","log10","fmod"
+	};
+
 	//是数字？
 	inline bool isNumber(char c) {
 		if (c >= 0x30 && c <= 0x39) return true;
@@ -33,12 +57,20 @@ private:
 		if (c == ' ' || c == '\t' || c == '\n') return true;
 		else return false;
 	}
-	
+
+	//是函数
+	inline bool isFunction(string::iterator _begIter, string::iterator _endIter) {
+		for (int i = 0; i < FUNC_SIZE; ++i) if (string(_begIter, _endIter) == functions[i]) return true;
+		return false;
+	}
+
 	/*
 	匹配函数：
 	matchNumber: 匹配数字
 	matchOperator: 匹配运算符
 	matchBracket: 匹配括号
+	matchConstant: 匹配常量
+	matchFunction: 匹配函数（内置）
 
 	_iter1指示表示开始匹配的位置，_ite2指示匹配到数字后的结束位置。匹配到的内容范围为[*_iter1,*_iter2)。
 	如果_iter1==_iter2，则表示匹配失败。否则匹配成功，调用此函数的地方就可以通过_iter1和_iter2获取内容，
@@ -48,6 +80,8 @@ private:
 	bool matchNumber(string::iterator& _iter1, string::iterator& _iter2, string::iterator& _endIter,string& _preType);
 	bool matchOperator(string::iterator& _iter1, string::iterator& _iter2, string::iterator& _endIter);
 	bool matchBracket(string::iterator& _iter1, string::iterator& _iter2, string::iterator& _endIter);
+	bool matchConstant(string::iterator& _iter1, string::iterator& _iter2, string::iterator& _endIter);
+	bool matchFunction(string::iterator& _iter1, string::iterator& _iter2, string::iterator& _endIter);
 public:
 	/*
 	驱动函数

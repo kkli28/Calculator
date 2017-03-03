@@ -42,7 +42,6 @@ bool lexical::matchNumber(string::iterator& _iter1, string::iterator& _iter2, st
 
 bool lexical::matchOperator(string::iterator& _iter1, string::iterator& _iter2, string::iterator& _endIter) {
 	if (_iter2 != _endIter && isOperator(*_iter2)) {
-		//cout << "match Operator: " << *_iter2 << endl;
 		++_iter2;
 		return true;
 	}
@@ -74,24 +73,26 @@ bool lexical::matchConstant(string::iterator& _iter1, string::iterator& _iter2, 
 bool lexical::matchFunction(string::iterator& _iter1, string::iterator& _iter2, string::iterator& _endIter) {
 	if (_iter2 == _endIter) return false;
 	
-	//三个字符长度的函数
-	if (_iter2+1 != _endIter && (_iter2 + 2) != _endIter) {
-		if (isFunction(_iter1, _iter2+3)) {
-			_iter2 += 3;
+	//需要先匹配长的函数，因为log为log10的子集，所以如果先匹配短的函数，就会导致log10被匹配为log
+	//五个字符长度的函数
+	if (_iter2+1 != _endIter && (_iter2 + 2) != _endIter && (_iter2+3)!=_endIter
+		&& (_iter2+4)!=_endIter) {
+		if (isFunction(_iter1, _iter2+5)) {
+			_iter2 += 5;
 			return true;
 		}
 
 		//四个字符长度的函数
-		else if ((_iter2 + 3) != _endIter) {
+		else if (_iter2 + 1 != _endIter && (_iter2 + 2) != _endIter && (_iter2 + 3) != _endIter) {
 			if (isFunction(_iter1, _iter2+4)) {
 				_iter2 += 4;
 				return true;
 			}
 
-			//五个字符长度的函数
-			else if ((_iter2 + 4) != _endIter) {
-				if (isFunction(_iter1, _iter2+5)) {
-					_iter2 += 5;
+			//三个字符长度的函数
+			else if (_iter2 + 1 != _endIter && (_iter2 + 2) != _endIter) {
+				if (isFunction(_iter1, _iter2+3)) {
+					_iter2 += 3;
 					return true;
 				}
 			}
@@ -112,13 +113,12 @@ void lexical::driver(string& _expr, string _lexs[], string _vals[], int& _count)
 	_count = 0;
 	
 	while (iter2 != endIter) {
-		//cout << *iter2 << endl;
 
 		//匹配函数
 		if (matchFunction(iter1, iter2, endIter)) {
 			_lexs[_count] = "FUNC";
 			_vals[_count] = string(iter1,iter2);
-			cout << "match FUNC: " << _vals[_count] << endl;
+
 			iter1 = iter2;
 			preType = _vals[_count];
 			++_count;
@@ -135,7 +135,7 @@ void lexical::driver(string& _expr, string _lexs[], string _vals[], int& _count)
 				_lexs[_count] = "PI";
 				_vals[_count] = "3.141592653589";
 			}
-			else throw Error(string("Error! lexical::driver()"));
+			else throw Error(string("Error! lexical::driver()."));
 
 			iter1 = iter2;
 			preType = _lexs[_count];
@@ -165,9 +165,7 @@ void lexical::driver(string& _expr, string _lexs[], string _vals[], int& _count)
 				_lexs[_count] = "POW";
 				_vals[_count] = "^";
 			}
-			else throw Error(string("Error! lexical::driver()"));
-
-			//cout << "match OP: " << _vals[_count] << endl;
+			else throw Error(string("Error! lexical::driver()."));
 
 			iter1 = iter2;
 			preType = _lexs[_count];
@@ -185,9 +183,7 @@ void lexical::driver(string& _expr, string _lexs[], string _vals[], int& _count)
 				_lexs[_count] = "RB";
 				_vals[_count] = ")";
 			}
-			else throw Error(string("Error! lexical::driver()"));
-
-			//cout << "match BR: " << _vals[_count] << endl;
+			else throw Error(string("Error! lexical::driver()."));
 
 			iter1 = iter2;
 			preType = _lexs[_count];
@@ -207,14 +203,12 @@ void lexical::driver(string& _expr, string _lexs[], string _vals[], int& _count)
 			_lexs[_count] = "NUM";
 			_vals[_count] = string(iter1, iter2);
 
-			//cout << "match NUM: " << _vals[_count] << endl;
-
 			iter1 = iter2;
 			preType = "NUM";
 			++_count;
 			continue;
 		}
 
-		throw Error(string("Error! lexical::driver()"));
+		throw Error(string("NaN"));
 	}
 }

@@ -11,7 +11,7 @@ const int MAX_SIZE = 1000;			//表达式最大支持1000个符号
 //输出函数表
 void printFuncs() {
 	cout << "-------------------- " << endl;
-	cout << "e 	自然对数" << endl;
+	cout << "e 	自然底数" << endl;
 	cout << "pi  	圆周率" << endl;
 	cout << endl << "--------------------" << endl;
 	cout << "abs 	取绝对值" << endl;
@@ -25,7 +25,6 @@ void printFuncs() {
 	cout << "log 	对数（e为底）" << endl;
 	cout << "log2 	对数（2为底）" << endl;
 	cout << "log10 	对数（10为底）" << endl;
-	cout << " fmod	求余" << endl;
 }
 
 int main() {
@@ -48,8 +47,7 @@ int main() {
 				continue;
 			}
 			lexer.driver(expr, lexs, vals, count);
-			//for (int i = 0; i < count; ++i) cout << lexs[i] << " : " << vals[i] << endl;
-			cout << "result: " <<setprecision(16)<< syntaxer.driver(lexs, vals, count) << endl;
+			cout << "\n = " << syntaxer.driver(lexs, vals, count) << endl;
 		}
 		catch (Error e) {
 			cout << e.what() << endl;

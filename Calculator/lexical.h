@@ -13,12 +13,12 @@ class lexical {
 	POW: 乘方
 	LB:  左括号
 	RB:  右括号
-	E:   自然对数
+	E:   自然底数
 	PI:  圆周率
 	FUNC: 函数
 
 	cmath头文件中的部分内容
-	e:	 自然对数
+	e:	 自然底数
 	pi:  圆周率
 	abs: 绝对值
 	ceil: 向上取整

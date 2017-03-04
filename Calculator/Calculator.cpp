@@ -56,6 +56,7 @@ int main() {
 			cout << "Error! Calculator::main()." << endl;
 		}
 	} while (true);
+
 	system("pause");
 	return 0;
 }

@@ -193,11 +193,11 @@ double syntax::driver(string _lexs[], string _vals[], int _count) {
 			else throw Error("Error! syntax::driver().");
 			stk.push(to_string(result));				//保存结果
 		}
-		else if (isFunction(topStr.begin(), topStr.end())) {
+		else if (constant::isFunction(topStr.begin(), topStr.end())) {
 			numStr1 = stk.top();
 			stk.pop();
 			double num1 = strToDouble(numStr1);
-			result=getFunction(topStr)(num1);
+			result= constant::getFunction(topStr)(num1);
 			stk.push(to_string(result));
 		}
 		else stk.push(topStr);							//是数字，则保存与另一个栈中

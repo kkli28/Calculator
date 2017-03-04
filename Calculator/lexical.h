@@ -33,6 +33,7 @@ class lexical {
 	log10: 对数（10为底）
 	*/
 private:
+
 	//是数字？
 	inline bool isNumber(char c) {
 		if (c >= 0x30 && c <= 0x39) return true;

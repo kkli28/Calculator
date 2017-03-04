@@ -77,21 +77,21 @@ bool lexical::matchFunction(string::iterator& _iter1, string::iterator& _iter2, 
 	//五个字符长度的函数
 	if (_iter2+1 != _endIter && (_iter2 + 2) != _endIter && (_iter2+3)!=_endIter
 		&& (_iter2+4)!=_endIter) {
-		if (isFunction(_iter1, _iter2+5)) {
+		if (constant::isFunction(_iter1, _iter2+5)) {
 			_iter2 += 5;
 			return true;
 		}
 
 		//四个字符长度的函数
 		else if (_iter2 + 1 != _endIter && (_iter2 + 2) != _endIter && (_iter2 + 3) != _endIter) {
-			if (isFunction(_iter1, _iter2+4)) {
+			if (constant::isFunction(_iter1, _iter2+4)) {
 				_iter2 += 4;
 				return true;
 			}
 
 			//三个字符长度的函数
 			else if (_iter2 + 1 != _endIter && (_iter2 + 2) != _endIter) {
-				if (isFunction(_iter1, _iter2+3)) {
+				if (constant::isFunction(_iter1, _iter2+3)) {
 					_iter2 += 3;
 					return true;
 				}

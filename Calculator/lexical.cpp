@@ -137,6 +137,9 @@ void lexical::driver(string& _expr, string _lexs[], string _vals[], int& _count)
 			}
 			else throw Error(string("Error! lexical::driver()."));
 
+			//log
+			constant::log(string("match: ") + _lexs[_count]);
+
 			iter1 = iter2;
 			preType = _lexs[_count];
 			++_count;
@@ -167,6 +170,9 @@ void lexical::driver(string& _expr, string _lexs[], string _vals[], int& _count)
 			}
 			else throw Error(string("Error! lexical::driver()."));
 
+			//log
+			constant::log(string("match: ") + _lexs[_count]);
+
 			iter1 = iter2;
 			preType = _lexs[_count];
 			++_count;
@@ -185,6 +191,9 @@ void lexical::driver(string& _expr, string _lexs[], string _vals[], int& _count)
 			}
 			else throw Error(string("Error! lexical::driver()."));
 
+			//log
+			constant::log(string("match: ") + _lexs[_count]);
+
 			iter1 = iter2;
 			preType = _lexs[_count];
 			++_count;
@@ -202,6 +211,9 @@ void lexical::driver(string& _expr, string _lexs[], string _vals[], int& _count)
 		if (matchNumber(iter1, iter2, endIter, preType)) {
 			_lexs[_count] = "NUM";
 			_vals[_count] = string(iter1, iter2);
+
+			//log
+			constant::log(string("match: ") + _lexs[_count]);
 
 			iter1 = iter2;
 			preType = "NUM";

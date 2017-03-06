@@ -6,10 +6,20 @@ namespace constant {
 	//函数个数
 	static const int FUNC_SIZE = 11;
 
+	//LOG文件
+	static const string LOG_FILE = "log.txt";
+
 	//函数
 	static const string functions[FUNC_SIZE] = {
 		"abs","ceil","exp","floor","cos","sin","sqrt","tan","log","log2","log10"
 	};
+
+	//打日志
+	static void log(string _str) {
+		ofstream logFile(LOG_FILE, ofstream::app);
+		logFile << _str << endl;
+		logFile.close();
+	}
 
 	//是函数
 	static bool isFunction(string::iterator _begIter, string::iterator _endIter) {

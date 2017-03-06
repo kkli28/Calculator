@@ -5,9 +5,13 @@ using namespace std;
 //E
 void syntax::E(string _lexs[], string _vals[], int& _begIndex, int& _endIndex, string _format, stack<string>& _stk) {
 	//E --> null
-	if (_begIndex == _endIndex) throw Error("Error! syntax::E().");
+	if (_begIndex == _endIndex) throw Error("NaN");
 
 	//E --> TA
+
+	//log
+	constant::log(_format+"E --> TA");
+
 	T(_lexs, _vals, _begIndex, _endIndex, _format + "E", _stk);
 	A(_lexs, _vals, _begIndex, _endIndex, _format + "E", _stk);
 }
@@ -19,6 +23,10 @@ void syntax::A(string _lexs[], string _vals[], int& _begIndex, int& _endIndex, s
 
 		//A --> +TA
 		if (str == "ADD" || str == "SUB") {
+
+			//log
+			constant::log(_format + "A --> +TA");
+
 			int index = _begIndex;
 			++_begIndex;
 			T(_lexs, _vals, _begIndex, _endIndex, _format + "A", _stk);
@@ -26,13 +34,20 @@ void syntax::A(string _lexs[], string _vals[], int& _begIndex, int& _endIndex, s
 			A(_lexs, _vals, _begIndex, _endIndex, _format + "A", _stk);
 		}
 	}
-
-	//A --> null
+	else {
+		//A --> null
+		//log
+		constant::log(_format + "A --> null");
+	}
 }
 
 //T
 void syntax::T(string _lexs[], string _vals[], int& _begIndex, int& _endIndex, string _format, stack<string>& _stk) {
 	//T --> FB
+
+	//log
+	constant::log(_format + "T --> TB");
+
 	F(_lexs, _vals, _begIndex, _endIndex, _format + "T", _stk);
 	B(_lexs, _vals, _begIndex, _endIndex, _format + "T", _stk);
 }
@@ -44,6 +59,10 @@ void syntax::B(string _lexs[], string _vals[], int& _begIndex, int& _endIndex, s
 
 		//B --> *FB
 		if (str == "MUL" || str == "DIV") {
+
+			//log
+			constant::log(_format + "B --> *FB");
+
 			int index = _begIndex;
 			++_begIndex;
 			F(_lexs, _vals, _begIndex, _endIndex, _format + "B", _stk);
@@ -51,13 +70,20 @@ void syntax::B(string _lexs[], string _vals[], int& _begIndex, int& _endIndex, s
 			B(_lexs, _vals, _begIndex, _endIndex, _format + "B", _stk);
 		}
 	}
-
-	//B --> null
+	else {
+		//B --> null
+		//log
+		constant::log(_format + "B --> null");
+	}
 }
 
 //F
 void syntax::F(string _lexs[], string _vals[], int& _begIndex, int& _endIndex, string _format, stack<string>& _stk) {
 	//F --> MN
+
+	//log
+	constant::log(_format + "F --> MN");
+
 	M(_lexs, _vals, _begIndex, _endIndex, _format + "F", _stk);
 	N(_lexs, _vals, _begIndex, _endIndex, _format + "F", _stk);
 }
@@ -69,6 +95,10 @@ void syntax::N(string _lexs[], string _vals[], int& _begIndex, int& _endIndex, s
 
 		//N --> ^MN
 		if (str == "POW") {
+
+			//log
+			constant::log(_format + "N --> ^MN");
+
 			int index = _begIndex;
 			++_begIndex;
 			M(_lexs, _vals, _begIndex, _endIndex, _format + "N", _stk);
@@ -76,7 +106,12 @@ void syntax::N(string _lexs[], string _vals[], int& _begIndex, int& _endIndex, s
 			N(_lexs, _vals, _begIndex, _endIndex, _format + "N", _stk);
 		}
 	}
-	//N --> null
+	else {
+		//N --> null
+
+		//log
+		constant::log(_format + "N --> null");
+	}
 }
 
 //M
@@ -86,6 +121,10 @@ void syntax::M(string _lexs[], string _vals[], int& _begIndex, int& _endIndex, s
 		string str = _lexs[_begIndex];
 		//M --> i
 		if (str == "NUM" || str=="E" || str=="PI") {
+
+			//log
+			constant::log(_format + "M --> i");
+
 			_stk.push(_vals[_begIndex]);
 			++_begIndex;
 			return;
@@ -93,6 +132,10 @@ void syntax::M(string _lexs[], string _vals[], int& _begIndex, int& _endIndex, s
 
 		//M --> func(E)
 		else if (str == "FUNC") {
+
+			//log
+			constant::log(_format + "M --> func(E)");
+
 			string func = _vals[_begIndex];
 			++_begIndex;
 			if (_begIndex != _endIndex && _lexs[_begIndex] == "LB") {
@@ -103,16 +146,38 @@ void syntax::M(string _lexs[], string _vals[], int& _begIndex, int& _endIndex, s
 					++_begIndex;
 					return;
 				}
+				else {
+					throw Error("NaN");
+
+					//log
+					constant::log(_format + "√ª”–∆•≈‰µΩ”“¿®∫≈");
+				}
+			}
+			else {
+				throw Error("NaN");
+
+				//log
+				constant::log(_format + "√ª”–∆•≈‰µΩ◊Û¿®∫≈");
 			}
 		}
 
 		//M --> (E)
 		else if (str == "LB") {
+
+			//log
+			constant::log(_format + "M --> (E)");
+
 			++_begIndex;
 			E(_lexs, _vals, _begIndex, _endIndex, _format + "M", _stk);
 			if (_begIndex != _endIndex && _lexs[_begIndex] == "RB") {
 				++_begIndex;
 				return;
+			}
+			else {
+				throw Error("NaN");
+
+				//log
+				constant::log(_format + "√ª”–∆•≈‰µΩ”“¿®∫≈");
 			}
 		}
 	}

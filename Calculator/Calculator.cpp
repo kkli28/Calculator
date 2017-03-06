@@ -33,9 +33,11 @@ int main() {
 	lexical lexer;
 	syntax syntaxer;
 	string expr;
+	double result = 0;
 	string lexs[MAX_SIZE];		//词法单元名
 	string vals[MAX_SIZE];		//词法单元值
 	int count = 0;				//词法单元个数
+	ofstream logFile;
 	do {
 		count = 0;
 		cout << "\n>> ";
@@ -46,17 +48,33 @@ int main() {
 				printFuncs();
 				continue;
 			}
+
+			//log
+			string logStr = string("\n\n========================================\nExpr: ") + expr +
+				string("========================================");
+			constant::log(logStr);
+
 			lexer.driver(expr, lexs, vals, count);
-			cout << "\n = " << syntaxer.driver(lexs, vals, count) << endl;
+			result = syntaxer.driver(lexs, vals, count);
+			cout << "\n = " << result << endl;
+			
+			//log
+			logStr = string("\nResult: ") + to_string(result);
+			constant::log(logStr);
 		}
 		catch (Error e) {
 			cout << e.what() << endl;
+
+			//log
+			constant::log(e.what());
 		}
 		catch (exception e) {
 			cout << "Error! Calculator::main()." << endl;
+
+			//log
+			constant::log("Error! Calculator::main().");
 		}
 	} while (true);
-
 	system("pause");
 	return 0;
 }

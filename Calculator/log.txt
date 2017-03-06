@@ -1,1 +1,328 @@
-Expr: 
+
+
+========================================
+Expr: 1+2.23--3^tan(123-sin(2^sin(2)))
+========================================
+match: NUM	[1]
+match: ADD	[+]
+match: NUM	[2.23]
+match: SUB	[-]
+match: NUM	[-3]
+match: POW	[^]
+match: FUNC	[tan]
+match: LB	[(]
+match: NUM	[123]
+match: SUB	[-]
+match: FUNC	[sin]
+match: LB	[(]
+match: NUM	[2]
+match: POW	[^]
+match: FUNC	[sin]
+match: LB	[(]
+match: NUM	[2]
+match: RB	[)]
+match: RB	[)]
+match: RB	[)]
+E --> TA
+    T --> TB
+        F --> MN
+            M --> i
+                [1]
+    A --> +TA
+        [+]
+        T --> TB
+            F --> MN
+                M --> i
+                    [2.23]
+        A --> -TA
+            [-]
+            T --> TB
+                F --> MN
+                    M --> i
+                        [-3]
+                    N --> ^MN
+                        [^]
+                        M --> func(E)
+                            [tan]
+                            [(]
+                            E --> TA
+                                T --> TB
+                                    F --> MN
+                                        M --> i
+                                            [123]
+                                A --> -TA
+                                    [-]
+                                    T --> TB
+                                        F --> MN
+                                            M --> func(E)
+                                                [sin]
+                                                [(]
+                                                E --> TA
+                                                    T --> TB
+                                                        F --> MN
+                                                            M --> i
+                                                                [2]
+                                                            N --> ^MN
+                                                                [^]
+                                                                M --> func(E)
+                                                                    [sin]
+                                                                    [(]
+                                                                    E --> TA
+                                                                        T --> TB
+                                                                            F --> MN
+                                                                                M --> i
+                                                                                    [2]
+                                                                    [)]
+                                                [)]
+                            [)]
+                        N --> null
+                            [null]
+                B --> null
+                    [null]
+            A --> null
+                [null]
+
+栈信息: 
+-
+^
+tan
+-
+sin
+^
+sin
+2
+2
+123
+-3
++
+2.23
+1
+
+Expr: 1+2.23--3^tan(123-sin(2^sin(2)))
+
+1.000000 + 2.230000 = 3.230000
+sin(2.000000) = 0.909297
+2.000000 ^ 0.909297 = 1.878130
+sin(1.878130) = 0.953144
+123.000000 - 0.953144 = 122.046856
+tan(122.046856) = -0.514598
+-3.000000 ^ -0.514598 = -nan(ind)
+NaN
+
+========================================
+Expr: 1+2.23--3^tan(123-sin(2^sin(2)))
+========================================
+match: NUM	[1]
+match: ADD	[+]
+match: NUM	[2.23]
+match: SUB	[-]
+match: NUM	[-3]
+match: POW	[^]
+match: FUNC	[tan]
+match: LB	[(]
+match: NUM	[123]
+match: SUB	[-]
+match: FUNC	[sin]
+match: LB	[(]
+match: NUM	[2]
+match: POW	[^]
+match: FUNC	[sin]
+match: LB	[(]
+match: NUM	[2]
+match: RB	[)]
+match: RB	[)]
+match: RB	[)]
+E --> TA
+    T --> TB
+        F --> MN
+            M --> i
+                [1]
+    A --> +TA
+        [+]
+        T --> TB
+            F --> MN
+                M --> i
+                    [2.23]
+        A --> -TA
+            [-]
+            T --> TB
+                F --> MN
+                    M --> i
+                        [-3]
+                    N --> ^MN
+                        [^]
+                        M --> func(E)
+                            [tan]
+                            [(]
+                            E --> TA
+                                T --> TB
+                                    F --> MN
+                                        M --> i
+                                            [123]
+                                A --> -TA
+                                    [-]
+                                    T --> TB
+                                        F --> MN
+                                            M --> func(E)
+                                                [sin]
+                                                [(]
+                                                E --> TA
+                                                    T --> TB
+                                                        F --> MN
+                                                            M --> i
+                                                                [2]
+                                                            N --> ^MN
+                                                                [^]
+                                                                M --> func(E)
+                                                                    [sin]
+                                                                    [(]
+                                                                    E --> TA
+                                                                        T --> TB
+                                                                            F --> MN
+                                                                                M --> i
+                                                                                    [2]
+                                                                    [)]
+                                                [)]
+                            [)]
+                        N --> null
+                            [null]
+                B --> null
+                    [null]
+            A --> null
+                [null]
+
+栈信息: 
+-
+^
+tan
+-
+sin
+^
+sin
+2
+2
+123
+-3
++
+2.23
+1
+
+Expr: 1+2.23--3^tan(123-sin(2^sin(2)))
+
+1.000000 + 2.230000 = 3.230000
+sin(2.000000) = 0.909297
+2.000000 ^ 0.909297 = 1.878130
+sin(1.878130) = 0.953144
+123.000000 - 0.953144 = 122.046856
+tan(122.046856) = -0.514598
+-3.000000 ^ -0.514598 = -nan(ind)
+NaN
+
+========================================
+Expr: 1+2.23--3^tan(123-sin(2^sin(2)))
+========================================
+match: NUM	[1]
+match: ADD	[+]
+match: NUM	[2.23]
+match: SUB	[-]
+match: NUM	[-3]
+match: POW	[^]
+match: FUNC	[tan]
+match: LB	[(]
+match: NUM	[123]
+match: SUB	[-]
+match: FUNC	[sin]
+match: LB	[(]
+match: NUM	[2]
+match: POW	[^]
+match: FUNC	[sin]
+match: LB	[(]
+match: NUM	[2]
+match: RB	[)]
+match: RB	[)]
+match: RB	[)]
+E --> TA
+    T --> TB
+        F --> MN
+            M --> i
+                [1]
+    A --> +TA
+        [+]
+        T --> TB
+            F --> MN
+                M --> i
+                    [2.23]
+        A --> -TA
+            [-]
+            T --> TB
+                F --> MN
+                    M --> i
+                        [-3]
+                    N --> ^MN
+                        [^]
+                        M --> func(E)
+                            [tan]
+                            [(]
+                            E --> TA
+                                T --> TB
+                                    F --> MN
+                                        M --> i
+                                            [123]
+                                A --> -TA
+                                    [-]
+                                    T --> TB
+                                        F --> MN
+                                            M --> func(E)
+                                                [sin]
+                                                [(]
+                                                E --> TA
+                                                    T --> TB
+                                                        F --> MN
+                                                            M --> i
+                                                                [2]
+                                                            N --> ^MN
+                                                                [^]
+                                                                M --> func(E)
+                                                                    [sin]
+                                                                    [(]
+                                                                    E --> TA
+                                                                        T --> TB
+                                                                            F --> MN
+                                                                                M --> i
+                                                                                    [2]
+                                                                    [)]
+                                                [)]
+                            [)]
+                        N --> null
+                            [null]
+                B --> null
+                    [null]
+            A --> null
+                [null]
+
+栈信息: 
+-
+^
+tan
+-
+sin
+^
+sin
+2
+2
+123
+-3
++
+2.23
+1
+
+Expr: 1+2.23--3^tan(123-sin(2^sin(2)))
+
+1.000000 + 2.230000 = 3.230000
+sin(2.000000) = 0.909297
+2.000000 ^ 0.909297 = 1.878130
+sin(1.878130) = 0.953144
+123.000000 - 0.953144 = 122.046856
+tan(122.046856) = -0.514598
+-3.000000 ^ -0.514598 = -nan(ind)
+NaN

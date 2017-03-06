@@ -4,16 +4,15 @@ using namespace std;
 
 //E
 void syntax::E(string _lexs[], string _vals[], int& _begIndex, int& _endIndex, string _format, stack<string>& _stk) {
-	//E --> null
 	if (_begIndex == _endIndex) throw Error("NaN");
 
 	//E --> TA
 
-	//log
-	constant::log(_format+"E --> TA");
+	//writeLog
+	constant::writeLog(_format + "E --> TA");
 
-	T(_lexs, _vals, _begIndex, _endIndex, _format + "E", _stk);
-	A(_lexs, _vals, _begIndex, _endIndex, _format + "E", _stk);
+	T(_lexs, _vals, _begIndex, _endIndex, _format + "    ", _stk);
+	A(_lexs, _vals, _begIndex, _endIndex, _format + "    ", _stk);
 }
 
 //A
@@ -24,20 +23,28 @@ void syntax::A(string _lexs[], string _vals[], int& _begIndex, int& _endIndex, s
 		//A --> +TA
 		if (str == "ADD" || str == "SUB") {
 
-			//log
-			constant::log(_format + "A --> +TA");
+			//writeLog
+			if (str == "ADD") constant::writeLog(_format + "A --> +TA");
+			else constant::writeLog(_format + "A --> -TA");
+
+			//writeLog
+			constant::writeLog(_format + "    [" + _vals[_begIndex] + "]");
 
 			int index = _begIndex;
 			++_begIndex;
-			T(_lexs, _vals, _begIndex, _endIndex, _format + "A", _stk);
+			T(_lexs, _vals, _begIndex, _endIndex, _format + "    ", _stk);
 			_stk.push(_vals[index]);
-			A(_lexs, _vals, _begIndex, _endIndex, _format + "A", _stk);
+			A(_lexs, _vals, _begIndex, _endIndex, _format + "    ", _stk);
 		}
 	}
 	else {
 		//A --> null
-		//log
-		constant::log(_format + "A --> null");
+
+		//writeLog
+		constant::writeLog(_format + "A --> null");
+
+		//writeLog
+		constant::writeLog(_format + "    [null]");
 	}
 }
 
@@ -45,11 +52,11 @@ void syntax::A(string _lexs[], string _vals[], int& _begIndex, int& _endIndex, s
 void syntax::T(string _lexs[], string _vals[], int& _begIndex, int& _endIndex, string _format, stack<string>& _stk) {
 	//T --> FB
 
-	//log
-	constant::log(_format + "T --> TB");
+	//writeLog
+	constant::writeLog(_format + "T --> TB");
 
-	F(_lexs, _vals, _begIndex, _endIndex, _format + "T", _stk);
-	B(_lexs, _vals, _begIndex, _endIndex, _format + "T", _stk);
+	F(_lexs, _vals, _begIndex, _endIndex, _format + "    ", _stk);
+	B(_lexs, _vals, _begIndex, _endIndex, _format + "    ", _stk);
 }
 
 //B
@@ -60,20 +67,29 @@ void syntax::B(string _lexs[], string _vals[], int& _begIndex, int& _endIndex, s
 		//B --> *FB
 		if (str == "MUL" || str == "DIV") {
 
-			//log
-			constant::log(_format + "B --> *FB");
+
+			//writeLog
+			if (str == "MUL") constant::writeLog(_format + "B --> *FB");
+			else constant::writeLog(_format + "B --> /FB");
+
+			//writeLog
+			constant::writeLog(_format + "    [" + _vals[_begIndex] + "]");
 
 			int index = _begIndex;
 			++_begIndex;
-			F(_lexs, _vals, _begIndex, _endIndex, _format + "B", _stk);
+			F(_lexs, _vals, _begIndex, _endIndex, _format + "    ", _stk);
 			_stk.push(_vals[index]);
-			B(_lexs, _vals, _begIndex, _endIndex, _format + "B", _stk);
+			B(_lexs, _vals, _begIndex, _endIndex, _format + "    ", _stk);
 		}
 	}
 	else {
 		//B --> null
-		//log
-		constant::log(_format + "B --> null");
+
+		//writeLog
+		constant::writeLog(_format + "B --> null");
+
+		//writeLog
+		constant::writeLog(_format + "    [null]");
 	}
 }
 
@@ -81,11 +97,11 @@ void syntax::B(string _lexs[], string _vals[], int& _begIndex, int& _endIndex, s
 void syntax::F(string _lexs[], string _vals[], int& _begIndex, int& _endIndex, string _format, stack<string>& _stk) {
 	//F --> MN
 
-	//log
-	constant::log(_format + "F --> MN");
+	//writeLog
+	constant::writeLog(_format + "F --> MN");
 
-	M(_lexs, _vals, _begIndex, _endIndex, _format + "F", _stk);
-	N(_lexs, _vals, _begIndex, _endIndex, _format + "F", _stk);
+	M(_lexs, _vals, _begIndex, _endIndex, _format + "    ", _stk);
+	N(_lexs, _vals, _begIndex, _endIndex, _format + "    ", _stk);
 }
 
 //N
@@ -96,21 +112,27 @@ void syntax::N(string _lexs[], string _vals[], int& _begIndex, int& _endIndex, s
 		//N --> ^MN
 		if (str == "POW") {
 
-			//log
-			constant::log(_format + "N --> ^MN");
+			//writeLog
+			constant::writeLog(_format + "N --> ^MN");
+
+			//writeLog
+			constant::writeLog(_format + "    [" + _vals[_begIndex] + "]");
 
 			int index = _begIndex;
 			++_begIndex;
-			M(_lexs, _vals, _begIndex, _endIndex, _format + "N", _stk);
+			M(_lexs, _vals, _begIndex, _endIndex, _format + "    ", _stk);
 			_stk.push(_vals[index]);
-			N(_lexs, _vals, _begIndex, _endIndex, _format + "N", _stk);
+			N(_lexs, _vals, _begIndex, _endIndex, _format + "    ", _stk);
 		}
 	}
 	else {
 		//N --> null
 
-		//log
-		constant::log(_format + "N --> null");
+		//writeLog
+		constant::writeLog(_format + "N --> null");
+
+		//writeLog
+		constant::writeLog(_format + "    [null]");
 	}
 }
 
@@ -120,10 +142,13 @@ void syntax::M(string _lexs[], string _vals[], int& _begIndex, int& _endIndex, s
 
 		string str = _lexs[_begIndex];
 		//M --> i
-		if (str == "NUM" || str=="E" || str=="PI") {
+		if (str == "NUM" || str == "E" || str == "PI") {
 
-			//log
-			constant::log(_format + "M --> i");
+			//writeLog
+			constant::writeLog(_format + "M --> i");
+
+			//writeLog
+			constant::writeLog(_format + "    [" + _vals[_begIndex] + "]");
 
 			_stk.push(_vals[_begIndex]);
 			++_begIndex;
@@ -133,56 +158,81 @@ void syntax::M(string _lexs[], string _vals[], int& _begIndex, int& _endIndex, s
 		//M --> func(E)
 		else if (str == "FUNC") {
 
-			//log
-			constant::log(_format + "M --> func(E)");
+			//writeLog
+			constant::writeLog(_format + "M --> func(E)");
+
+			//writeLog
+			constant::writeLog(_format + "    [" + _vals[_begIndex] + "]");
 
 			string func = _vals[_begIndex];
 			++_begIndex;
 			if (_begIndex != _endIndex && _lexs[_begIndex] == "LB") {
+
+				//writeLog
+				constant::writeLog(_format + string("    [") + _vals[_begIndex] + string("]"));
+
 				++_begIndex;
-				E(_lexs, _vals, _begIndex, _endIndex, _format + "M", _stk);
+				E(_lexs, _vals, _begIndex, _endIndex, _format + "    ", _stk);
 				_stk.push(func);
 				if (_begIndex != _endIndex && _lexs[_begIndex] == "RB") {
+
+					//writeLog
+					constant::writeLog(_format + "    [" + _vals[_begIndex] + "]");
+
 					++_begIndex;
 					return;
 				}
 				else {
-					throw Error("NaN");
 
-					//log
-					constant::log(_format + "没有匹配到右括号");
+					//writeLog
+					constant::writeLog(_format + "没有匹配到右括号");
+
+					throw Error("NaN");
 				}
 			}
 			else {
-				throw Error("NaN");
 
-				//log
-				constant::log(_format + "没有匹配到左括号");
+				//writeLog
+				constant::writeLog(_format + "没有匹配到左括号");
+
+				throw Error("NaN");
 			}
 		}
 
 		//M --> (E)
 		else if (str == "LB") {
 
-			//log
-			constant::log(_format + "M --> (E)");
+			//writeLog
+			constant::writeLog(_format + "M --> (E)");
+
+			//writeLog
+			constant::writeLog(_format + "    [" + _vals[_begIndex] + "]");
 
 			++_begIndex;
-			E(_lexs, _vals, _begIndex, _endIndex, _format + "M", _stk);
+			E(_lexs, _vals, _begIndex, _endIndex, _format + "    ", _stk);
 			if (_begIndex != _endIndex && _lexs[_begIndex] == "RB") {
+
+				//writeLog
+				constant::writeLog(_format + "    [" + _vals[_begIndex] + "]");
 				++_begIndex;
 				return;
 			}
 			else {
-				throw Error("NaN");
 
-				//log
-				constant::log(_format + "没有匹配到右括号");
+				//writeLog
+				constant::writeLog(_format + "没有匹配到右括号");
+
+				throw Error("NaN");
 			}
 		}
 	}
+	else {
 
-	throw Error(string("NaN"));
+		//log
+		constant::writeLog(string("到达表达式末尾") + "    _begIndex: " + to_string(_begIndex) + "    _endIndex: " + to_string(_endIndex));
+
+		throw Error(string("NaN"));
+	}
 }
 
 //字符串转化为数字
@@ -200,7 +250,7 @@ double syntax::strToDouble(string& _str) {
 		if (_str[i] >= 0x30 && _str[i] <= 0x39) result = _str[i] - 0x30 + result * 10;
 		else if (_str[i] == '.') {
 			double temp = 0;
-			int j=i+1;
+			int j = i + 1;
 			int cnt = size - j;
 			for (; j < size; ++j) temp = _str[j] - 0x30 + temp * 10;
 			for (j = 0; j < cnt; ++j) temp /= 10;
@@ -227,9 +277,13 @@ double syntax::driver(string _lexs[], string _vals[], int _count) {
 
 	if (stk.empty()) return 0;
 
+	//log
+	constant::writeLog("\n栈信息: ");
+
 	stack<string> rvStack;		//保存正序的后缀式
 	while (!stk.empty()) {
 		rvStack.push(stk.top());
+		constant::writeLog(rvStack.top());
 		stk.pop();
 	}
 
@@ -237,6 +291,12 @@ double syntax::driver(string _lexs[], string _vals[], int _count) {
 	string numStr1 = "";				//存储第一个操作数的字符串
 	string numStr2 = "";				//存储第二个操作数的字符串
 	double result = 0;					//计算结果
+
+	//log
+	string logStr;
+	for (int i = 0; i < _count; ++i)
+		logStr += _vals[i];
+	constant::writeLog(string("\nExpr: ") + logStr + "\n");
 
 	while (!rvStack.empty()) {
 		topStr = rvStack.top();
@@ -250,6 +310,7 @@ double syntax::driver(string _lexs[], string _vals[], int _count) {
 
 			double num1 = strToDouble(numStr2);
 			double num2 = strToDouble(numStr1);
+
 			if (topStr == "+") result = num1 + num2;
 			else if (topStr == "-") result = num1 - num2;
 			else if (topStr == "*") result = num1*num2;
@@ -257,12 +318,21 @@ double syntax::driver(string _lexs[], string _vals[], int _count) {
 			else if (topStr == "^") result = pow(num1, num2);	//没法自己实现浮点数的乘方，故调用标准库pow函数
 			else throw Error("Error! syntax::driver().");
 			stk.push(to_string(result));				//保存结果
+
+			//writeLog
+			constant::writeLog(to_string(num1) + " " +
+				topStr + " " + to_string(num2) + " = " + to_string(result));
 		}
 		else if (constant::isFunction(topStr.begin(), topStr.end())) {
 			numStr1 = stk.top();
 			stk.pop();
 			double num1 = strToDouble(numStr1);
-			result= constant::getFunction(topStr)(num1);
+
+			result = constant::getFunction(topStr)(num1);
+
+			//writeLog
+			constant::writeLog(topStr + "(" + to_string(num1) + ")" + " = " + to_string(result));
+
 			stk.push(to_string(result));
 		}
 		else stk.push(topStr);							//是数字，则保存与另一个栈中

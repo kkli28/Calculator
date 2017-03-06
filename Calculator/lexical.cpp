@@ -4,16 +4,18 @@ using namespace std;
 
 //匹配
 bool lexical::matchNumber(string::iterator& _iter1, string::iterator& _iter2, string::iterator& _endIter, string& _preType) {
+
 	//第一个字符为+或-，可能是数字的符号，也可能是操作数
 	if (_iter2!=_endIter && (*_iter2 == '+' || *_iter2 == '-')) {
 
-		//如果后续字符是数字，则判断前一次匹配到的是否是数字。
-		//如果是，则为运算符。否则（前一次匹配到运算符）判定为数字的符号。
+		//根据前一个词法单元是什么，断定这个符号是正负号还是加减号
 		if (_iter2 + 1 != _endIter && isNumber(*(_iter2 + 1))) {
-			if (_preType == "NUM")
-				return false;
-			else
+			if (_preType == "ADD" || _preType=="SUB" || _preType=="MUL"
+				|| _preType== "MOD" || _preType=="POW" || _preType==""
+				|| _preType=="LB") {
 				++_iter2;
+			}
+			else return false;
 		}
 
 		//+或-后面不是数字，则直接退出
@@ -58,22 +60,41 @@ bool lexical::matchBracket(string::iterator& _iter1, string::iterator& _iter2, s
 
 bool lexical::matchConstant(string::iterator& _iter1, string::iterator& _iter2, string::iterator& _endIter) {
 	if (_iter2 != _endIter){
+
+		//自然底数e
 		if (*_iter2 == 'e') {
 			++_iter2;
 			return true;
 		}
-		else if (_iter2 + 1 != _endIter && *_iter2=='p' && *(_iter2+1)=='i') {
-			_iter2 += 2;
-			return true;
+		else if (_iter2 + 1 != _endIter) {
+			//圆周率pi
+			if (*_iter2 == 'p' && *(_iter2 + 1) == 'i') {
+				_iter2 += 2;
+				return true;
+			}
+			else if (*_iter2 == '+' || *_iter2 == '-') {
+				//+e或-e
+				if (*(_iter2+1) == 'e') {
+					_iter2 += 2;
+					return true;
+				}
+				//+pi或-pi
+				else if (_iter2 + 2 != _endIter && *(_iter2 + 1) == 'p' && *(_iter2 + 2) == 'i') {
+					_iter2 += 3;
+					return true;
+				}
+			}
 		}
 	}
+
+	//匹配失败
 	return false;
 }
 
 bool lexical::matchFunction(string::iterator& _iter1, string::iterator& _iter2, string::iterator& _endIter) {
 	if (_iter2 == _endIter) return false;
 	
-	//需要先匹配长的函数，因为log为log10的子集，所以如果先匹配短的函数，就会导致log10被匹配为log
+	//需要先匹配长的函数，因为writeLog为writeLog10的子集，所以如果先匹配短的函数，就会导致writeLog10被匹配为writeLog
 	//五个字符长度的函数
 	if (_iter2+1 != _endIter && (_iter2 + 2) != _endIter && (_iter2+3)!=_endIter
 		&& (_iter2+4)!=_endIter) {
@@ -119,6 +140,9 @@ void lexical::driver(string& _expr, string _lexs[], string _vals[], int& _count)
 			_lexs[_count] = "FUNC";
 			_vals[_count] = string(iter1,iter2);
 
+			//writeLog
+			constant::writeLog(string("match: ") + _lexs[_count]+"\t["+_vals[_count]+"]");
+
 			iter1 = iter2;
 			preType = _vals[_count];
 			++_count;
@@ -127,21 +151,52 @@ void lexical::driver(string& _expr, string _lexs[], string _vals[], int& _count)
 
 		//匹配常量
 		if (matchConstant(iter1, iter2, endIter)) {
+			//e
 			if (iter1+1 == iter2) {
 				_lexs[_count] = "E";
 				_vals[_count] = "2.718281828459";
 			}
+			//+e或-e或pi
 			else if (iter1+2 == iter2) {
+				//+e或-e
+				if (*(iter1 + 1) == 'e') {
+					_lexs[_count] = "E";
+					if (*iter1 == '+') _vals[_count] = "2.718281828459";
+					else _vals[_count] = "-2.718281828459";
+				}
+				//pi
+				else {
+					_lexs[_count] = "PI";
+					_vals[_count] = "3.141592653589";
+				}
+			}
+			//+pi或-pi
+			else if (iter1 + 3 == iter2) {
 				_lexs[_count] = "PI";
-				_vals[_count] = "3.141592653589";
+				if(*(iter1)=='+') _vals[_count] = "3.141592653589";
+				else _vals[_count] = "-3.141592653589";
 			}
 			else throw Error(string("Error! lexical::driver()."));
 
-			//log
-			constant::log(string("match: ") + _lexs[_count]);
+			//writeLog
+			constant::writeLog("match: " + _lexs[_count] + "\t[" + _vals[_count] + "]");
 
 			iter1 = iter2;
 			preType = _lexs[_count];
+			++_count;
+			continue;
+		}
+		
+		//匹配数字
+		if (matchNumber(iter1, iter2, endIter, preType)) {
+			_lexs[_count] = "NUM";
+			_vals[_count] = string(iter1, iter2);
+
+			//writeLog
+			constant::writeLog(string("match: ") + _lexs[_count] + "\t[" + _vals[_count] + "]");
+
+			iter1 = iter2;
+			preType = "NUM";
 			++_count;
 			continue;
 		}
@@ -170,8 +225,8 @@ void lexical::driver(string& _expr, string _lexs[], string _vals[], int& _count)
 			}
 			else throw Error(string("Error! lexical::driver()."));
 
-			//log
-			constant::log(string("match: ") + _lexs[_count]);
+			//writeLog
+			constant::writeLog(string("match: ") + _lexs[_count] + "\t[" + _vals[_count] + "]");
 
 			iter1 = iter2;
 			preType = _lexs[_count];
@@ -191,33 +246,19 @@ void lexical::driver(string& _expr, string _lexs[], string _vals[], int& _count)
 			}
 			else throw Error(string("Error! lexical::driver()."));
 
-			//log
-			constant::log(string("match: ") + _lexs[_count]);
+			//writeLog
+			constant::writeLog(string("match: ") + _lexs[_count] + "\t[" + _vals[_count] + "]");
 
 			iter1 = iter2;
 			preType = _lexs[_count];
 			++_count;
 			continue;
 		}
-		 
+		
 		//匹配空格
 		if (iter2 != endIter && isWhiteSpace(*iter2)) {
 			++iter2;
 			++iter1;
-			continue;
-		}
-
-		//匹配数字
-		if (matchNumber(iter1, iter2, endIter, preType)) {
-			_lexs[_count] = "NUM";
-			_vals[_count] = string(iter1, iter2);
-
-			//log
-			constant::log(string("match: ") + _lexs[_count]);
-
-			iter1 = iter2;
-			preType = "NUM";
-			++_count;
 			continue;
 		}
 

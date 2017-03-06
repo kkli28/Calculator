@@ -29,7 +29,11 @@ void printFuncs() {
 
 int main() {
 	cout << "计算器--v1.0  @kkli28" << endl;
-	cout << "#: 结束\n*: 函数表\n" << endl;
+	cout << "#: 结束\n*: 函数表" << endl;
+
+	//清空日志文件
+	constant::clearLogFile();
+
 	lexical lexer;
 	syntax syntaxer;
 	string expr;
@@ -50,9 +54,9 @@ int main() {
 			}
 
 			//log
-			string logStr = string("\n\n========================================\nExpr: ") + expr +
-				string("========================================");
-			constant::log(logStr);
+			string logStr = string("\n========================================\nExpr: ") + expr +
+				string("\n========================================");
+			constant::writeLog(logStr);
 
 			lexer.driver(expr, lexs, vals, count);
 			result = syntaxer.driver(lexs, vals, count);
@@ -60,19 +64,19 @@ int main() {
 			
 			//log
 			logStr = string("\nResult: ") + to_string(result);
-			constant::log(logStr);
+			constant::writeLog(logStr);
 		}
 		catch (Error e) {
 			cout << e.what() << endl;
 
 			//log
-			constant::log(e.what());
+			constant::writeLog(e.what());
 		}
 		catch (exception e) {
 			cout << "Error! Calculator::main()." << endl;
 
 			//log
-			constant::log("Error! Calculator::main().");
+			constant::writeLog("Error! Calculator::main().");
 		}
 	} while (true);
 	system("pause");

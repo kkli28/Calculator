@@ -15,9 +15,16 @@ namespace constant {
 	};
 
 	//打日志
-	static void log(string _str) {
-		ofstream logFile(LOG_FILE, ofstream::app);
-		logFile << _str << endl;
+	static void writeLog(string _str) {
+		std::ofstream logFile(LOG_FILE, std::ofstream::app);
+		logFile << _str << std::endl;
+		logFile.close();
+	}
+
+	//清空日志文件
+	static void clearLogFile() {
+		std::ofstream logFile(LOG_FILE);
+		logFile << std::endl;
 		logFile.close();
 	}
 
